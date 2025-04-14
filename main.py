@@ -4,7 +4,7 @@ from pipeline.quiz_gen import QuizUser
 def main():
     batch=1
     while True:
-        luigi.build([QuizUser(batch_id=batch)], local_scheduler=True)
+        luigi.build([QuizUser(batch_id=batch)])
 
         again = input("\n🎮 Play again with new words? (y/n): ").strip().lower()
         if again != 'y':

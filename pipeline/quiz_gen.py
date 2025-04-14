@@ -45,7 +45,7 @@ class QuizUser(luigi.Task):
                         print("You already matched this Finnish word.")
                         continue
                     if fin < 1 or fin > 10:
-                        print('English index out of range.')
+                        print('Finnish index out of range.')
                         continue
                     if eng < 1 or eng > 10:
                         print('English index out of range.')
