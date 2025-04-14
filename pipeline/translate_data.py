@@ -6,13 +6,14 @@ import os
 from pipeline.store_data import init_db, save_translation, is_translated, get_all_translations
 
 class GetTranslation(luigi.Task):
+    batch_id = luigi.IntParameter()
     def requires(self):
         init_db()
         from pipeline.process_data import ProcessData
         return ProcessData()
 
     def output(self):
-        return luigi.LocalTarget('data/translated_words.csv')
+        return luigi.LocalTarget(f'data/translated_words_{self.batch_id}.csv')
 
     def run(self):
         os.makedirs('data', exist_ok=True)
@@ -21,6 +22,13 @@ class GetTranslation(luigi.Task):
             all_words = [line.strip() for line in infile if line.strip()]
 
         words = [word for word in all_words if not is_translated(word)]
+
+        if not words:
+            print("🎉 All words are already translated!")
+            with open(self.output().path, 'w', newline='', encoding='utf-8') as f:
+                writer = csv.writer(f)
+                writer.writerow(['Finnish', 'English'])  # Empty CSV with headers
+            return
 
         translations = []
         for word in words[:10]:
@@ -37,7 +45,7 @@ class GetTranslation(luigi.Task):
                 translated = response.json()[0]
                 translations.append((word, translated))
                 save_translation(word, translated)
-                time.sleep(2)
+                time.sleep(1)
             except Exception as e:
                 print(e)
                 translations.append((word, "ERROR"))

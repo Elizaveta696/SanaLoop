@@ -15,7 +15,7 @@ def init_db():
     conn.close()
 
 def save_translation(finnish, english):
-    print(f"Saving to DB: {finnish} → {english}")
+    print(f"Saving to DB: {finnish}")
     conn = sqlite3.connect('data/words.db')
     c = conn.cursor()
     c.execute("INSERT OR REPLACE INTO translations (finnish, english) VALUES (?, ?)", (finnish, english))

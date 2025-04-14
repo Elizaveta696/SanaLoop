@@ -1,5 +1,15 @@
 import luigi
-from pipeline.translate_data import GetTranslation
+from pipeline.quiz_gen import QuizUser
+
+def main():
+    batch=1
+    while True:
+        luigi.build([QuizUser(batch_id=batch)], local_scheduler=True)
+
+        again = input("\n🎮 Play again with new words? (y/n): ").strip().lower()
+        if again != 'y':
+            break
+        batch += 1
 
 if __name__ == '__main__':
-    luigi.build([GetTranslation()], local_scheduler = True)
+    main()

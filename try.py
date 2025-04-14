@@ -5,4 +5,4 @@ save_translation("kissa", "cat")
 
 for fi, en in get_all_translations():
     print(f"{fi} → {en}")
-
+print(is_translated("etuoikealta"))
